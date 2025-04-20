@@ -1,0 +1,57 @@
+#include <stdio.h>
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+void push(int val) {
+    if (top == MAX - 1) {
+        printf("Stack Overflow\n");
+        return;
+    }
+    stack[++top] = val;
+}
+
+void pop(int count) {
+    while (count-- && top >= 0) {
+        top--;
+    }
+}
+
+void display() {
+    for (int i = top; i >= 0; i--) {
+        printf("%d ", stack[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &stack[++top]);
+    }
+    
+    pop(2); // Pop 2 elements
+    
+    int valuesToPush1[4];
+    for (int i = 0; i < 4; i++) {
+        scanf("%d", &valuesToPush1[i]);
+        push(valuesToPush1[i]);
+    }
+    
+    pop(1); // Pop 1 element
+    
+    int valuesToPush2[2];
+    for (int i = 0; i < 2; i++) {
+        scanf("%d", &valuesToPush2[i]);
+        push(valuesToPush2[i]);
+    }
+    
+    pop(3); // Pop 3 elements
+    
+    display(); // Display stack elements
+    
+    return 0;
+}
