@@ -1,0 +1,79 @@
+int precedence(char opr)
+{
+    switch (opr)
+    {
+    case '+':
+    case '-':
+        return 1;
+    case '*':
+    case '/':
+        return 2;
+    default:
+        return 0;
+    }
+}
+
+void doProcess(int *operands , char * operators , int *top1 , int *top2 )
+{
+    int x = operands[(*top1)--];
+    int y = operands[(*top1)--];
+    int z;
+    char opr = operators[(*top2)--];
+    switch (opr)
+    {
+    case '+':
+        z = y + x;
+        break;
+    case '-':
+        z = y - x;
+        break;
+    case '*':
+        z = y * x;
+        break;
+    case '/':
+        z = y / x;
+        break;
+    }
+    operands[++(*top1)] = z;
+}
+
+int calculate(char* s) {
+   int size = strlen(s);
+  int operands[size],top1=-1,top2=-1;
+  char operators[size];
+  for (int i=0 ; i<size ; i++)
+  {
+    char ch = s[i];
+    if(isdigit(ch))
+    {
+        int num =0;
+        while (isdigit(s[i]))
+        {
+            num = num * 10 + (s[i] - '0');
+            i++;
+        }
+        i--;
+        operands[++top1]=num;
+    }
+    else if (ch=='*'||ch=='+'||ch=='-'||ch=='/')
+    {
+        if (top2==-1)
+        {
+            operators[++top2]=ch;
+        }
+        else 
+        {
+            while (top2!=-1 && precedence(ch)<=precedence(operators[top2]))
+            {
+                  doProcess(operands, operators, &top1, &top2);
+            }
+            operators[++top2] = ch;
+        }
+    }
+  }
+  while(top2!=-1)
+  {
+      doProcess(operands, operators, &top1, &top2);
+  }
+  return operands[top1];
+}
